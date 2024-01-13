@@ -122,7 +122,21 @@ $$ \lambda*i = e^{\beta_0 + \beta_1 X*{i1} + \beta*2 X*{i2} + \dots + \beta*p X*
 
 ```r
 glm(Y ~ X, family = poisson, data = dataset)
+
+# view each regression coefficient
+tidy(glm_model)
+tidy(glm_model, conf.int = TRUE) # for 95% confidence interval
+
+# view model summary
+glance(glm_model)
 ```
+
+#### Interpretation of Coeffs of Poisson Regression
+
+e.g. $\beta_1 = 0.5$
+
+- $\beta_1$ is the expected change in the log of the mean count for a one-unit increase in $X_1$ holding all other variables constant
+- a one-unit increase in $X_1$ will increase the mean count by $e^{0.5} = 1.65$ times.
 
 ### Inference of Poisson Regression
 
@@ -179,3 +193,5 @@ $$X \sim Poisson(\lambda) = lim_{m \to \infty} Negative Binomial(m, p_i)$$
 ```r
 glm.nb(Y ~ X, data = dataset)
 ```
+
+Since negative binomial has the same link function as Poisson, we can interpret the coefficients the same way.
