@@ -133,7 +133,7 @@ predict(model, newdata = data, type = "probs")
 
 ### Inference of MLR
 
-- Check if regressor is significant using Wald test.
+- Check if regressor is significant using **Wald test**.
 
 $$z_j^{(u,v)} = \frac{\hat{\beta}_j^{(u,v)}}{SE(\hat{\beta}_j^{(u,v)})}$$
 
