@@ -63,7 +63,7 @@ $$\sum_{j = 1}^{m} p_{i,j} = 1$$
 - use `MASS::polr` function
 
 ```R
-olr <- polr(
+ordinal_model <- polr(
   formula = response ~ regressor_1 + regressor_2,
   data = data,
   Hess = TRUE # Hessian matrix of log-likelihood
@@ -75,13 +75,14 @@ olr <- polr(
 - Similar to MLR using **Wald test**
 
 ```R
-summary_ordinal_model <- cbind(tidy(ordinal_model),
-  p.value = pnorm(abs(tidy(ordinal_model)$statistic), # p-value
+cbind(
+  tidy(ordinal_model),
+  p.value = pnorm(abs(tidy(ordinal_model)$statistic),
     lower.tail = FALSE
   ) * 2
 )
-
 # confidence intervals
+
 confint(ordinal_model) # default is 95%
 ```
 
@@ -97,7 +98,7 @@ predict(ordinal_model, newdata = data, type = "probs")
 # returns probabilities for each level
 ```
 
-- To get the predicted cumulative odds for a new observation, use `VGAM::vglm` function
+- To get the **corresponding predicted** cumulative odds for a new observation, use `VGAM::vglm` function
 
 ```R
 olr <- vglm(
