@@ -114,7 +114,7 @@ $$h(\mu_i) = log(\mu_i) = \eta_i = \beta_0 + \beta_1 X_{i1} + \beta_2 X_{i2} + \
 
 Hence,
 
-$$ \lambda*i = e^{\beta_0 + \beta_1 X*{i1} + \beta*2 X*{i2} + \dots + \beta*p X*{ik}} $$
+$$\lambda_i = e^{\eta_i} = e^{\beta_0 + \beta_1 X_{i1} + \beta_2 X_{i2} + \dots + \beta_p X_{ik}}$$
 
 - This is good since $\lambda_i$ (mean count) is always positive
 

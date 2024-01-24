@@ -75,6 +75,10 @@ $$ \lambda(t) = \lim\_{\Delta t \to 0} \frac{P(t \leq Y < t + \Delta t | Y \geq 
 - Weibull distribution is a continuous probability distribution
   - _heavy-tailed distribution_: has a higher probability of large values compared to a normal distribution
 
+Let
+
+$$Y \sim \text{Weibull}(\alpha, \beta)$$
+
 **PDF:**
 
 $$f_Y(t) = \frac{\alpha}{\beta^{\alpha}} t^{\alpha - 1} e^{-(t/\beta)^{\alpha}} \text{   for } t, \alpha, \beta > 0$$
@@ -95,6 +99,17 @@ $$F_Y(t) = 1 - e^{-(t/\beta)^{\alpha}}$$
 
 $$S_Y(t) = e^{-(t/\beta)^{\alpha}}$$
 
+##### Weibull in R
+
+```R
+pweibull(q = 2, shape = 1, scale = 1, lower.tail = FALSE) # survival probability
+
+# get hazard function
+weibull_hazard <- function(t, alpha, beta) {
+  alpha * t^(alpha - 1) / beta^alpha
+}
+```
+
 ### Estimating Survival Function
 
 - Parametric
@@ -109,4 +124,9 @@ $$S_Y(t) = e^{-(t/\beta)^{\alpha}}$$
   - does not assume any distribution
   - can handle censoring
 
-(until 4.3)
+#### `Surv` Function in R
+
+- `Surv` function in R is used to create a survival object
+  - `Surv(time, event)`: `time` is the time to event, `event` is a binary indicator of whether the event has occurred
+  - `event = 1` means the event has occurred
+  - `event = 0` means the event has not occurred, but the subject has been censored
