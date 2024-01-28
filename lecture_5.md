@@ -36,6 +36,8 @@
 
 #### Survival Function
 
+V
+
 - Probability that a subject survives beyond time $t$
 - We do not model _Probability Distribution_ directly
 
@@ -72,6 +74,7 @@ $$ \lambda(t) = \lim\_{\Delta t \to 0} \frac{P(t \leq Y < t + \Delta t | Y \geq 
 #### Example: The Weibull Case
 
 - Most popular _parametric_ survival model
+  - Parametric models are GLMs with hazard function as the link function
 - Weibull distribution is a continuous probability distribution
   - _heavy-tailed distribution_: has a higher probability of large values compared to a normal distribution
 
@@ -104,10 +107,25 @@ $$S_Y(t) = e^{-(t/\beta)^{\alpha}}$$
 ```R
 pweibull(q = 2, shape = 1, scale = 1, lower.tail = FALSE) # survival probability
 
+# get median
+qweibull(p = 0.5, shape = 1, scale = 1, lower.tail = FALSE) # quantile
+```
+
+```
+
 # get hazard function
 weibull_hazard <- function(t, alpha, beta) {
   alpha * t^(alpha - 1) / beta^alpha
 }
+
+# Get the hazard function for data
+fit_weibull <- survreg(Surv(time, event) ~ 1,
+  data = data,
+  dist = "weibull")
+
+# get the estimated parameters
+weibull_shape <- 1/ fit_weibull$scale # alpha
+weibull_scale <- exp(fit_weibull$coefficients["(Intercept)"]) # beta
 ```
 
 ### Estimating Survival Function
@@ -128,5 +146,44 @@ weibull_hazard <- function(t, alpha, beta) {
 
 - `Surv` function in R is used to create a survival object
   - `Surv(time, event)`: `time` is the time to event, `event` is a binary indicator of whether the event has occurred
-  - `event = 1` means the event has occurred
   - `event = 0` means the event has not occurred, but the subject has been censored
+  - `event = 1` means the event has occurred
+  - _does not have to be 0 or 1, can be 1 or 2, or 0 or 2, etc as long as censored is the lower number_
+
+#### Kaplan-Meier Estimator
+
+```R
+fit_km <- survfit(Surv(time, event) ~ 1,
+  data = data)
+
+# get survival function
+tidy(fit_km)
+
+# plot survival function, use ggfortify::autoplot
+autoplot(fit_km)
+```
+
+- output of `tidy(fit_km)` are:
+  - `time`: time
+  - `n.risk`: number of subjects at risk at time `time` (before we record the event)
+  - `n.event`: number of events at time `time`
+  - `n.censor`: number of censored subjects at time `time`
+  - `estimate`: proportion of subjects still alive at time `time`
+
+#### Cox Proportional Hazards Model
+
+$$\lambda(t|X_{i,1},...,X_{i,p}) = \lambda_0(t) e^{\beta_1 X_{i,1} + ... + \beta_p X_{i,p}}$$
+
+- $\lambda_0(t)$: baseline hazard function
+
+```R
+fit_cox <- coxph(Surv(time, event) ~ var1 + var2,
+  data = data)
+
+# view the estimated coefficients
+tidy(fit_cox, conf.int = TRUE)
+```
+
+##### Interpretation of Cox Model
+
+- $\beta_j$ on the continous $j$th regressor: $\exp(\beta_j)$ is the multiplicative change in the hazard function for a one unit increase in $X_{i,j}$
