@@ -36,6 +36,8 @@ $$
 
 _(notice the $\beta$s are now functions of $\tau$)_
 
+- Error term: **Fidelity**
+
 $$
 \text{loss} = \sum_{i} e_i[\tau - I(e_i < 0)] = \sum_{i: e_i \geq 0} \tau|e_i|+\sum_{i: e_i < 0}(1-\tau)|e_i|
 $$
@@ -55,7 +57,7 @@ pqr_model <- rq(y ~ x,
                 data = data)
 ```
 
-#### Inferece of Parametric Quantile Regression
+#### Inference of Parametric Quantile Regression
 
 - To justify the relationship b/w the $\tau$th quantile in response and regressors.
 
