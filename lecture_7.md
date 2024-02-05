@@ -42,6 +42,10 @@ $$
 \text{loss} = \sum_{i} e_i[\tau - I(e_i < 0)] = \sum_{i: e_i \geq 0} \tau|e_i|+\sum_{i: e_i < 0}(1-\tau)|e_i|
 $$
 
+Where
+
+$$I(e_i < 0) = \begin{cases} 1 & \text{if } e_i < 0 \\ 0 & \text{otherwise} \end{cases}$$
+
 #### Estimation of Parametric Quantile Regression
 
 ```R
