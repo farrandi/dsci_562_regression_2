@@ -11,32 +11,30 @@
   - Estimate uncertainty will be larger (compared to if we had complete data)
   - Biased estimates of survival probabilities
 
-    ### Censoring Examples
+  ### Censoring Examples
 
-    #### Constant Right Censoring
+  #### Constant Right Censoring
 
-    - All subjects are followed for the same amount of time
-      - We do not know what happens after the study period
-    - e.g. 10 year study to see people die from cancer
+  - All subjects are followed for the same amount of time
+    - We do not know what happens after the study period
+  - e.g. 10 year study to see people die from cancer
 
-    <img src="images/5_right_censoring.png" width = "450">
+  <img src="images/5_right_censoring.png" width = "450">
 
-    #### Random Right Censoring
+  #### Random Right Censoring
 
-    - Something happened (unrelated event) to the subject that caused them to leave the study
-    - e.g. the person died from a car accident, or moved to another country when we are measuring cancer death
+  - Something happened (unrelated event) to the subject that caused them to leave the study
+  - e.g. the person died from a car accident, or moved to another country when we are measuring cancer death
 
-    #### Left Censoring
+  #### Left Censoring
 
-    - (not covered in this course)
-    - We do not know when the event happened, only that it happened before the study period
-    - e.g. study on kids learning to ski, one kid already knew how to ski before the study started but we don't know when they learned
+  - (not covered in this course)
+  - We do not know when the event happened, only that it happened before the study period
+  - e.g. study on kids learning to ski, one kid already knew how to ski before the study started but we don't know when they learned
 
 ### Key Concepts
 
 #### Survival Function
-
-V
 
 - Probability that a subject survives beyond time $t$
 - We do not model _Probability Distribution_ directly
@@ -86,9 +84,9 @@ $$Y \sim \text{Weibull}(\alpha, \beta)$$
 
 $$f_Y(t) = \frac{\alpha}{\beta^{\alpha}} t^{\alpha - 1} e^{-(t/\beta)^{\alpha}} \text{   for } t, \alpha, \beta > 0$$
 
-- $\alpha$: shape parameter (controls the shape of the hazard function)
+- $\alpha$: **shape parameter** (controls the shape of the hazard function)
   - if $\alpha = 1$, it is the exponential distribution with parameter $\beta$
-- $\beta$: scale parameter
+- $\beta$: **scale parameter**
 
   - does it stretch (large value) or shrink (small value) the distribution
 
@@ -109,9 +107,6 @@ pweibull(q = 2, shape = 1, scale = 1, lower.tail = FALSE) # survival probability
 
 # get median
 qweibull(p = 0.5, shape = 1, scale = 1, lower.tail = FALSE) # quantile
-```
-
-```
 
 # get hazard function
 weibull_hazard <- function(t, alpha, beta) {
@@ -170,7 +165,17 @@ autoplot(fit_km)
   - `n.censor`: number of censored subjects at time `time`
   - `estimate`: proportion of subjects still alive at time `time`
 
+##### Restricted Mean Survival Time
+
+- The Kaplan Meier estimate does not always drop to 0 (ideally it should)
+  - It does not drop to 0 if largest observed time is censored
+  - fix: drop the zero at largest observed time -> results in **restricted mean survival time**
+
 #### Cox Proportional Hazards Model
+
+- Semi-parametric model
+  - define systematic part of the model (like GLM)
+  - do not assume a distribution for the survival time
 
 $$\lambda(t|X_{i,1},...,X_{i,p}) = \lambda_0(t) e^{\beta_1 X_{i,1} + ... + \beta_p X_{i,p}}$$
 
@@ -186,4 +191,4 @@ tidy(fit_cox, conf.int = TRUE)
 
 ##### Interpretation of Cox Model
 
-- $\beta_j$ on the continous $j$th regressor: $\exp(\beta_j)$ is the multiplicative change in the hazard function for a one unit increase in $X_{i,j}$
+- $\beta_j$ on the continous $j$th regressor: An increase in the $j$th regressor by 1 unit multiplies the hazard by $e^{\beta_j}$, holding all other variables constant
